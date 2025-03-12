@@ -330,10 +330,10 @@
                                 <i class="fa-brands fa-instagram text-pink-600 text-xl w-6"></i>
                                 <span>@freesip.indonesia</span>
                             </a>
-                            <a href="#" class="flex items-center gap-3 text-gray-700 hover:text-gray-900">
+                            {{-- <a href="#" class="flex items-center gap-3 text-gray-700 hover:text-gray-900">
                                 <i class="fa-solid fa-envelope text-blue-500 text-xl w-6"></i>
                                 <span>info@freesip.co.id</span>
-                            </a>
+                            </a> --}}
                             <a href="#" class="flex items-center gap-3 text-gray-700 hover:text-gray-900">
                                 <i class="fa-brands fa-whatsapp text-green-600 text-xl w-6"></i>
                                 <span>+62 812-3456-7890</span>
