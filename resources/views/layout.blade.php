@@ -1,121 +1,177 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
+    @yield('head')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NatureGlow Soaps - @yield('title')</title>
-    <meta name="description" content="@yield('description', 'Handcrafted artisanal soaps made with natural ingredients')">
-    
+    <title>FreeSip - @yield('title')</title>
+    <link rel="icon" type="image/svg+xml"
+        href="https://owala.myshopify.com/cdn/shop/files/owala-favicon-512x512.png" />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    
+
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#10b981',
-                        'primary-dark': '#047857',
-                        'secondary': '#fcd34d',
-                    }
-                }
-            }
+    @vite('resources/css/app.css')
+    <style>
+        * {
+            scroll-behavior: smooth;
+            scrollbar-width: none;
         }
-    </script>
+
+        .navbar {
+            transition: all 0.3s ease;
+        }
+
+        .navbar.hidden-nav {
+            transform: translateY(-100%);
+        }
+
+        .burger-line {
+            transition: all 0.2s ease;
+        }
+
+        .burger-active .line1 {
+            transform: rotate(45deg) translate(7.5px, 7.5px);
+        }
+
+        .burger-active .line2 {
+            opacity: 0;
+        }
+
+        .burger-active .line3 {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #000000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .active-link::after {
+            width: 100%;
+        }
+    </style>
 </head>
-<body class="antialiased bg-gray-50">
-    <header class="bg-white shadow">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+<body class="antialiased bg-gray-50 flex flex-col">
+    <header class="navbar fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 flex justify-center">
+        <nav class="max-w-4xl w-11/12 px-4 sm:px-6 lg:px-8 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg my-5">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('home') }}" class="font-bold text-xl text-primary">NatureGlow</a>
+                        <a href="{{ route('home') }}" class="font-bold text-xl text-black">FreeSip</a>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                        <a href="{{ route('home') }}"
+                            class="nav-link {{ request()->routeIs('home') ? 'active-link text-gray-900' : 'text-gray-500 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 text-sm font-medium">
                             Home
                         </a>
-                        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                        <a href="{{ route('about') }}"
+                            class="nav-link {{ request()->routeIs('about') ? 'active-link text-gray-900' : 'text-gray-500 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 text-sm font-medium">
                             About Us
                         </a>
-                        <a href="{{ route('catalog') }}" class="{{ request()->routeIs('catalog') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Catalog
+                        <a href="{{ route('collection') }}"
+                            class="nav-link {{ request()->routeIs('collection') ? 'active-link text-gray-900' : 'text-gray-500 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Collection
                         </a>
                     </div>
                 </div>
-                
-                <!-- Mobile menu button -->
-                <div class="flex items-center sm:hidden">
-                    <button type="button" id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
+
+                <div class="flex items-center">
+                    <button type="button" id="mobile-menu-btn"
+                        class="sm:hidden inline-flex items-center justify-center p-3 rounded-md">
+                        <div class="h-5 w-6 flex flex-col justify-between">
+                            <span class="burger-line line1 block h-0.5 w-6 bg-gray-600"></span>
+                            <span class="burger-line line2 block h-0.5 w-6 bg-gray-600"></span>
+                            <span class="burger-line line3 block h-0.5 w-6 bg-gray-600"></span>
+                        </div>
                     </button>
                 </div>
             </div>
-            
-            <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="sm:hidden hidden" id="mobile-menu">
+
+            <div class="sm:hidden hidden transition-all duration-300 max-h-0 overflow-hidden" id="mobile-menu">
                 <div class="pt-2 pb-3 space-y-1">
-                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-primary-dark text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md">
+                    <a href="{{ route('home') }}"
+                        class="{{ request()->routeIs('home') ? 'bg-gray-100 text-black' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md transition duration-150 ease-in-out">
                         Home
                     </a>
-                    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'bg-primary-dark text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md">
+                    <a href="{{ route('about') }}"
+                        class="{{ request()->routeIs('about') ? 'bg-gray-100 text-black' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md transition duration-150 ease-in-out">
                         About Us
                     </a>
-                    <a href="{{ route('catalog') }}" class="{{ request()->routeIs('catalog') ? 'bg-primary-dark text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md">
-                        Catalog
+                    <a href="{{ route('collection') }}"
+                        class="{{ request()->routeIs('collection') ? 'bg-gray-100 text-black' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block pl-3 pr-4 py-2 text-base font-medium rounded-md transition duration-150 ease-in-out">
+                        Collection
                     </a>
                 </div>
             </div>
         </nav>
     </header>
-    
-    <main>
+
+    <div>
         @yield('content')
-    </main>
-    
-    <footer class="bg-white border-t border-gray-200 mt-12">
-        <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            <div class="md:flex md:items-center md:justify-between">
-                <div class="flex justify-center md:justify-start">
-                    <p class="text-gray-500 text-sm">&copy; 2025 NatureGlow Soaps. All rights reserved.</p>
-                </div>
-                <div class="flex justify-center mt-4 md:mt-0">
-                    <div class="flex space-x-6">
-                        <a href="#" class="text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">Facebook</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">Instagram</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">Twitter</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
+    </div>
+    @yield('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/SplitText.min.js"></script>
     <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenu.classList.toggle('hidden');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            this.classList.toggle('burger-active');
+
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.style.maxHeight = '0';
+                setTimeout(() => {
+                    mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                }, 10);
+            } else {
+                mobileMenu.style.maxHeight = '0';
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
         });
+
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+        const scrollThreshold = 50;
+
+        window.addEventListener('scroll', function() {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (Math.abs(lastScrollTop - currentScroll) <= 10) return;
+
+            if (currentScroll > scrollThreshold) {
+                if (currentScroll > lastScrollTop) {
+                    navbar.classList.add('hidden-nav');
+                } else {
+                    navbar.classList.remove('hidden-nav');
+                }
+            }
+
+            lastScrollTop = currentScroll;
+        }, false);
     </script>
 </body>
+
 </html>
